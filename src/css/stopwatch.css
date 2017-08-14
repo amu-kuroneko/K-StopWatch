@@ -1,0 +1,32 @@
+@charset 'utf-8';
+
+#k-stopwatch {
+    position: fixed;
+    width: 300px;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: none;
+    top: 0px;
+    left: 0px;
+    z-index: 9999;
+    cursor: pointer;
+}
+#k-stopwatch div#k-stopwatch-times {
+    display: table;
+    width: 100%;
+    margin: 0px;
+}
+#k-stopwatch span.k-stopwatch-time-area {
+    display: table-cell;
+    font-size: 40px;
+    padding: 10px 0px;
+    border: 2px solid #E0E0E0;
+    border-right: none;
+    text-align: center;
+    vertical-align: middle;
+    color: black;
+    line-height: 1em;
+    user-select: none;
+}
+#k-stopwatch span.k-stopwatch-time-area:last-child {
+    border-right: 1px solid #E0E0E0;
+}
