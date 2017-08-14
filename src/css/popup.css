@@ -1,0 +1,61 @@
+@charset 'utf-8';
+@import './reset.css';
+
+body {
+	background-color: #F0F0F0;
+}
+
+div#application {
+	width: 200px;
+	font-size: 14px;
+	padding: 8px 0px;
+	text-align: center;
+}
+
+div#times {
+	display: table;
+	width: 100%;
+}
+span.time-area {
+	display: table-cell;
+	font-size: 24px;
+	padding: 5px 0px;
+	border: 1px solid #E0E0E0;
+	border-right: none;
+	text-align: center;
+	vertical-align: middle;
+}
+span.time-area:last-child {
+	border-right: 1px solid #E0E0E0;
+}
+
+ul#commands {
+	display: table;
+	padding: 5px 0px;
+	width: 100%;
+}
+li.command {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	width: 33%;
+	border: 1px solid #E0E0E0;
+	padding: 15px 5px;
+	color: black;
+	font-size: 12px;
+	background-color: transparent;
+	cursor: pointer;
+	white-space: nowrap;
+}
+li.command:hover {
+	background-color: #ADD8E7;
+}
+
+div#visible {
+	display: block;
+}
+label.visible-area {
+	display: inline-block;
+	font-size: 12px;
+	padding: 5px;
+}
