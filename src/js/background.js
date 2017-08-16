@@ -1,4 +1,4 @@
-$(() => {
+(() => {
     let interval = null;
     let currentTime = {
         hour: -1,
@@ -88,4 +88,4 @@ $(() => {
 
     loadData();
     return;
-});
+})();
