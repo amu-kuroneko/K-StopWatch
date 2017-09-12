@@ -63,3 +63,27 @@ label.visible-area {
 	font-size: 12px;
 	padding: 5px;
 }
+
+div#lap-area {
+	border-top: 1px solid #E0E0E0;
+	font-size: 14px;
+	height: 100px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+div.lap-row {
+	border-bottom: 1px solid #E0E0E0;
+	overflow: hidden;
+	padding: 8px 4px 4px;
+}
+div.lap-title {
+	float: left;
+}
+div.lap-time {
+	float: right;
+}
+span.lap-number {
+	display: inline-block;
+	width: 12px;
+	text-align: center;
+}
