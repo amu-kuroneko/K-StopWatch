@@ -21,6 +21,14 @@ $(() => {
             right: $('#right-second'),
         },
     };
+    const $lapArea = $('#lap-area');
+    const $commands = {
+        start: $('#start'),
+        stop: $('#stop'),
+        reset: $('#reset'),
+        show: $('#show'),
+        hide: $('#hide'),
+    };
 
     const loadData = callback => {
         chrome.storage.local.get(common.data, item => {
@@ -41,6 +49,7 @@ $(() => {
         return;
     };
     const startCounter = () => {
+        $commands.start.text('ラップ');
         if (!interval) {
             interval = setInterval(() => {
                 const time = data.time + common.getTimestamp() - data.start;
@@ -51,6 +60,7 @@ $(() => {
         return;
     };
     const stopCounter = () => {
+        $commands.start.text('開始');
         if (interval) {
             clearInterval(interval);
             interval = null;
@@ -59,11 +69,14 @@ $(() => {
     };
     const commands = {
         start: () => {
-            if (!data.running) {
+            if (data.running) {
+                data.laps.push(data.time + common.getTimestamp() - data.start);
+                updateLaps(data.laps);
+            } else {
                 data.running = true;
                 data.start = common.getTimestamp();
-                updateData();
             }
+            updateData();
             startCounter();
             return;
         },
@@ -79,8 +92,10 @@ $(() => {
         reset: () => {
             data.time = 0;
             data.start = common.getTimestamp();
+            data.laps = [];
             updateData();
             updateTime(0);
+            updateLaps(data.laps);
             return;
         },
         show: () => {
@@ -117,6 +132,28 @@ $(() => {
         }
         return;
     };
+    const updateLaps = laps => {
+        $lapArea.empty();
+        let previous = 0;
+        for (const index in laps) {
+            const $row = $('<div>').addClass('lap-row');
+            $row.append(`<div class='lap-title'>ラップ${parseInt(index) + 1}</div>`);
+            const $lapTime = $('<div>').addClass('lap-time');
+            const time = common.getTimes(laps[index] - previous);
+            $lapTime.append(`<span class='lap-time-area lap-number'>${parseInt(time.hour / 10)}</span>`);
+            $lapTime.append(`<span class='lap-time-area lap-number'>${parseInt(time.hour % 10)}</span>`);
+            $lapTime.append(`<span class='lap-time-area'>:</span>`);
+            $lapTime.append(`<span class='lap-time-area lap-number'>${parseInt(time.minute / 10)}</span>`);
+            $lapTime.append(`<span class='lap-time-area lap-number'>${parseInt(time.minute % 10)}</span>`);
+            $lapTime.append(`<span class='lap-time-area'>:</span>`);
+            $lapTime.append(`<span class='lap-time-area lap-number'>${parseInt(time.second / 10)}</span>`);
+            $lapTime.append(`<span class='lap-time-area lap-number'>${parseInt(time.second % 10)}</span>`);
+            $row.append($lapTime);
+            $lapArea.prepend($row);
+            previous = laps[index];
+        }
+        return;
+    }
 
     $('[name=visible]').on('change', function () {
         execute(parseInt($(this).val()) ? 'show' : 'hide');
@@ -130,6 +167,7 @@ $(() => {
     loadData(item => {
         $(`#${item.visible ? 'show' : 'hide'}`).prop('checked', true);
         updateTime(item.time);
+        updateLaps(item.laps);
         if (item.running) {
             startCounter();
         }

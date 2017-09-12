@@ -5,6 +5,7 @@ const common = {
         running: false,
         time: 0,
         start: 0,
+        laps: [],
     },
     getTimestamp: () => new Date().getTime(),
     getTimes: unixtime => {
