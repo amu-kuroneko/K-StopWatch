@@ -2,88 +2,103 @@
 @import './reset.css';
 
 body {
-	background-color: #F0F0F0;
+    background-color: #F0F0F0;
 }
 
 div#application {
-	width: 200px;
-	font-size: 14px;
-	padding: 8px 0px;
-	text-align: center;
+    width: 200px;
+    font-size: 14px;
+    padding: 8px 0px;
+    text-align: center;
 }
 
 div#times {
-	display: table;
-	width: 100%;
+    display: table;
+    width: 100%;
+    padding-bottom: 5px;
 }
 span.time-area {
-	display: table-cell;
-	font-size: 24px;
-	padding: 5px 0px;
-	border: 1px solid #E0E0E0;
-	border-right: none;
-	text-align: center;
-	vertical-align: middle;
+    display: table-cell;
+    font-size: 24px;
+    padding: 5px 0px;
+    border: 1px solid #E0E0E0;
+    border-right: none;
+    text-align: center;
+    vertical-align: middle;
 }
 span.time-area:last-child {
-	border-right: 1px solid #E0E0E0;
+    border-right: 1px solid #E0E0E0;
 }
 
-ul#commands {
-	display: table;
-	padding: 5px 0px;
-	width: 100%;
+ul.commands {
+    display: table;
+    width: 100%;
 }
 li.command {
-	display: table-cell;
-	vertical-align: middle;
-	text-align: center;
-	width: 33%;
-	border: 1px solid #E0E0E0;
-	padding: 15px 5px;
-	color: black;
-	font-size: 12px;
-	background-color: transparent;
-	cursor: pointer;
-	white-space: nowrap;
-	user-select: none;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    width: 33%;
+    border: 1px solid #E0E0E0;
+    padding: 15px 5px;
+    color: black;
+    font-size: 12px;
+    background-color: transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
 }
 li.command:hover {
-	background-color: #ADD8E7;
+    background-color: #ADD8E7;
 }
 li.command:active {
-	background-color: #8AACB8;
+    background-color: #8AACB8;
+}
+li.command.disabled, li.command.disabled:hover, li.command.disabled:active {
+    background-color: transparent;
+    cursor: auto;
+    border-left: none;
+    border-right: none;
 }
 
 div#visible {
-	display: block;
+    display: block;
 }
 label.visible-area {
-	display: inline-block;
-	font-size: 12px;
-	padding: 5px;
+    display: inline-block;
+    font-size: 12px;
+    padding: 5px;
 }
 
 div#lap-area {
-	border-top: 1px solid #E0E0E0;
-	font-size: 14px;
-	height: 100px;
-	overflow-y: scroll;
-	overflow-x: hidden;
+    border-top: 1px solid #E0E0E0;
+    font-size: 14px;
+    height: 100px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 div.lap-row {
-	border-bottom: 1px solid #E0E0E0;
-	overflow: hidden;
-	padding: 8px 4px 4px;
+    border-bottom: 1px solid #E0E0E0;
+    overflow: hidden;
+    padding: 8px 4px 4px;
 }
 div.lap-title {
-	float: left;
+    float: left;
 }
 div.lap-time {
-	float: right;
+    float: right;
 }
 span.lap-number {
-	display: inline-block;
-	width: 12px;
-	text-align: center;
+    display: inline-block;
+    width: 12px;
+    text-align: center;
+}
+
+.hidden-area {
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    top: -100%;
+    left: -100%;
 }

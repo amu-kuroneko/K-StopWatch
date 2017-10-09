@@ -10,9 +10,9 @@ const common = {
     getTimestamp: () => new Date().getTime(),
     getTimes: unixtime => {
         let second = parseInt(unixtime / 1000);
-        let hour = parseInt(second / 3600);
+        const hour = parseInt(second / 3600);
         if (99 < hour) {
-            hour = 99;
+            return {hour: 99, minute: 99, second: 99};
         }
         second %= 3600;
         const minute = parseInt(second / 60);

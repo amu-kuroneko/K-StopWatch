@@ -22,10 +22,12 @@ $(() => {
         },
     };
     const $lapArea = $('#lap-area');
+    const $temporaryTime = $('#temporary-time');
     const $commands = {
         start: $('#start'),
         stop: $('#stop'),
         reset: $('#reset'),
+        copy: $('#copy'),
         show: $('#show'),
         hide: $('#hide'),
     };
@@ -67,6 +69,10 @@ $(() => {
         }
         return;
     };
+    /**
+     * Functions for each commands.
+     * @return Return true if send message to background, false otherwise.
+     */
     const commands = {
         start: () => {
             if (data.running) {
@@ -78,7 +84,7 @@ $(() => {
             }
             updateData();
             startCounter();
-            return;
+            return true;
         },
         stop: () => {
             if (data.running) {
@@ -87,7 +93,7 @@ $(() => {
                 updateData();
             }
             stopCounter();
-            return;
+            return true;
         },
         reset: () => {
             data.time = 0;
@@ -96,22 +102,40 @@ $(() => {
             updateData();
             updateTime(0);
             updateLaps(data.laps);
-            return;
+            return true;
+        },
+        copy: () => {
+            const unixtime = data.running ? data.time + common.getTimestamp() - data.start : data.time;
+            const time = common.getTimes(unixtime);
+            for (const key in time) {
+                if (time[key] < 10) {
+                    time[key] = '0' + time[key];
+                }
+            }
+            $temporaryTime.val(`${time.hour}:${time.minute}:${time.second}`);
+            $temporaryTime.select();
+            try {
+                if (!document.execCommand('copy')) {
+                    alert('Faild to copy.');
+                }
+            } catch (error) {
+                alert('Faild to copy.');
+            }
+            return false;
         },
         show: () => {
             data.visible = true;
             updateData();
-            return;
+            return true;
         },
         hide: () => {
             data.visible = false;
             updateData();
-            return;
+            return true;
         },
     };
     const execute = command => {
-        if ($.isFunction(commands[command])) {
-            commands[command]();
+        if ($.isFunction(commands[command]) && commands[command]()) {
             sendMessage({data, command});
         }
         return;
@@ -159,7 +183,7 @@ $(() => {
         execute(parseInt($(this).val()) ? 'show' : 'hide');
         return;
     });
-    $('.command').on('click', function () {
+    $('.command:not(.disabled)').on('click', function () {
         execute($(this).attr('id'));
         return;
     });
