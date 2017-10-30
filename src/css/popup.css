@@ -48,6 +48,9 @@ li.command {
     white-space: nowrap;
     user-select: none;
 }
+li.command.use-option {
+    padding: 10px 5px 20px;
+}
 li.command:hover {
     background-color: #ADD8E7;
 }
@@ -101,4 +104,12 @@ span.lap-number {
     position: absolute;
     top: -100%;
     left: -100%;
+}
+.shortcut {
+    font-size: 10px;
+    font-family: YuGothic, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI","Noto Sans Japanese","ヒラギノ角ゴ ProN W3", Meiryo, sans-serif;
+}
+.command > .shortcut {
+    position: absolute;
+    margin-top: 14px;
 }
