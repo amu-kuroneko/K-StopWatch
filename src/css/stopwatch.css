@@ -30,3 +30,23 @@
 #k-stopwatch span.k-stopwatch-time-area:last-child {
     border-right: 1px solid #E0E0E0;
 }
+
+#k-stopwatch-hidden-area {
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    position: fixed;
+    top: -100%;
+    left: -100%;
+}
+
+#k-stopwatch-toast {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    display: none;
+    color: white;
+    z-index: 10000;
+}

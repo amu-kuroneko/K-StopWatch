@@ -1,6 +1,10 @@
 $(() => {
     $('body').prepend((() => {
         /*
+        <div id='k-stopwatch-hidden-area'>
+            <input type='text' value='' id='k-stopwatch-temporary-time' />
+        </div>
+        <div id='k-stopwatch-toast'></div>
         <div id='k-stopwatch'>
             <div id='k-stopwatch-times' >
                 <span id='k-stopwatch-left-hour' class='k-stopwatch-time-area' >0</span>
@@ -17,6 +21,7 @@ $(() => {
     }).toString().split('*')[1]);
 
     const CONTENT_MERGIN = 30;
+    const COPY_KEY_CODE = 'C'.charCodeAt(0);
     const $times = {
         hour: {
             left: $('#k-stopwatch-left-hour'),
@@ -32,9 +37,12 @@ $(() => {
         },
     };
     const $wrapper = $('#k-stopwatch');
+    const $temporaryTime = $('#k-stopwatch-temporary-time');
+    const $toast = $('#k-stopwatch-toast');
     const $window = $(window);
 
     let position = {top: 0, left: 0};
+    let cursor = {top: 0, left: 0};
     let dragging;
     let windowSize = {width: $window.width(), height: $window.height()};
     let contentSize = {width: $wrapper.width(), height: $wrapper.height()};
@@ -83,12 +91,40 @@ $(() => {
         }
         return {top, left};
     };
+    const isKeyDownCommand = event => {
+        return (event.ctrlKey && !event.metaKey) || (!event.ctrlKey && event.metaKey);
+    };
+    const copy = () => {
+        const time = {};
+        for (const index in $times) {
+            time[index] = `${$times[index].left.text()}${$times[index].right.text()}`;
+        }
+        $temporaryTime.val(`${time.hour}:${time.minute}:${time.second}`);
+        $temporaryTime.select();
+        try {
+            if (document.execCommand('copy')) {
+                $toast.text('Copied K-StopWatch')
+                    .stop(true, true)
+                    .css({top: cursor.top + 20, left: cursor.left + 5})
+                    .show()
+                    .fadeOut(1200);
+            } else {
+                alert('Failed to copy.');
+            }
+        } catch (error) {
+            alert('Failed to copy.');
+        }
+        window.getSelection().removeAllRanges();
+        $temporaryTime.blur();
+        return;
+    };
 
     $('#k-stopwatch').on('mousedown', event => {
         dragging = {x: event.screenX, y: event.screenY};
         return;
     });
-    $('html, body').on('mousemove', event => {
+    $(document).on('mousemove', event => {
+        cursor = {top: event.clientY, left: event.clientX};
         if (dragging) {
             position = getPosition(event.screenX, event.screenY, false);
             dragging = {x: event.screenX, y: event.screenY};
@@ -101,6 +137,12 @@ $(() => {
             position = getPosition(event.screenX, event.screenY, true);
             dragging = null;
             $wrapper.css(position);
+            event.preventDefault();
+        }
+        return;
+    }).on('keydown', event => {
+        if (isKeyDownCommand(event) && event.shiftKey && event.keyCode === COPY_KEY_CODE) {
+            copy();
             event.preventDefault();
         }
         return;
