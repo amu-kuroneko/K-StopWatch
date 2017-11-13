@@ -7,13 +7,6 @@
     };
     let data = Object.assign({}, common.data);
 
-    const loadData = () => {
-        chrome.storage.local.get(common.data, item => {
-            data = item;
-            return;
-        });
-        return;
-    };
     const sendMessage = message => {
         chrome.windows.getAll(null, windows => windows.forEach(
             window => chrome.tabs.getAllInWindow(window.id, tabs => tabs.forEach(tab => {
@@ -48,7 +41,7 @@
                     return;
                 }, common.INTERVAL_TIME);
             }
-            return {result: true, message: 'success'};
+            return {result: true, message: 'success', command: 'start'};
         },
         stop: newData => {
             if (interval) {
@@ -58,22 +51,36 @@
             data = newData;
             const time = data.time;
             sendTime(time);
-            return {result: true, message: 'success'};
+            return {result: true, message: 'success', command: 'stop'};
         },
         reset: newData => {
             data = newData;
             sendTime(0);
-            return {result: true, message: 'success'};
+            return {result: true, message: 'success', command: 'reset'};
         },
         show: newData => {
             data = newData;
             sendMessage({command: 'visible', data: true})
-            return {result: true, message: 'success'};
+            return {result: true, message: 'success', command: 'show'};
         },
         hide: newData => {
             data = newData;
             sendMessage({command: 'visible', data: false})
-            return {result: true, message: 'success'};
+            return {result: truj, message: 'success', command: 'hide'};
+        },
+        switch: () => {
+            let command = '';
+            if (data.running) {
+                data.running = false;
+                data.time += common.getTimestamp() - data.start;
+                command = 'stop';
+            } else {
+                data.running = true;
+                data.start = common.getTimestamp();
+                command = 'start';
+            }
+            common.updateData(data);
+            return commands[command](data);
         },
     };
 
@@ -86,6 +93,6 @@
         return;
     });
 
-    loadData();
+    common.loadData().then(item => (data = item));
     return;
 })();

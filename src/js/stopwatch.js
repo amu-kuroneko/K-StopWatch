@@ -103,11 +103,7 @@ $(() => {
         $temporaryTime.select();
         try {
             if (document.execCommand('copy')) {
-                $toast.text('Copied K-StopWatch')
-                    .stop(true, true)
-                    .css({top: cursor.top + 20, left: cursor.left + 5})
-                    .show()
-                    .fadeOut(1200);
+                showToast('Copied K-StopWatch');
             } else {
                 alert('Failed to copy.');
             }
@@ -118,9 +114,22 @@ $(() => {
         $temporaryTime.blur();
         return;
     };
+    const showToast = text => {
+        $toast.text(text)
+            .stop(true, true)
+            .css({top: cursor.top + 20, left: cursor.left + 5})
+            .show()
+            .fadeOut(1200);
+        return;
+    };
 
     $('#k-stopwatch').on('mousedown', event => {
         dragging = {x: event.screenX, y: event.screenY};
+        return;
+    }).on('dblclick', event => {
+        common.sendMessage({ command: 'switch' })
+            .then(response => showToast(response.command))
+            .catch(error => console.log(error.toString()));
         return;
     });
     $(document).on('mousemove', event => {
