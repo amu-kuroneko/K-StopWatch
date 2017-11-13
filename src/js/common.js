@@ -19,4 +19,11 @@ const common = {
         second %= 60;
         return {hour, minute, second};
     },
+    sendMessage: message => new Promise(
+        (resolve, reject) => chrome.runtime.sendMessage(message,
+            response => response && response.result ? resolve(response) : reject(new Error(response)))),
+    loadData: () => new Promise(
+        resolve => chrome.storage.local.get(common.data, item => resolve(item))),
+    updateData: data => new Promise(
+        resolve => chrome.storage.local.set(data, () => resolve(data))),
 };

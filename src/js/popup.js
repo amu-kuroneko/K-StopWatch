@@ -32,24 +32,6 @@ $(() => {
         hide: $('#hide'),
     };
 
-    const loadData = callback => {
-        chrome.storage.local.get(common.data, item => {
-            data = item;
-            if ($.isFunction(callback)) {
-                callback(item);
-            }
-            return;
-        });
-        return;
-    };
-    const updateData = callback => {
-        chrome.storage.local.set(data, callback);
-        return;
-    };
-    const sendMessage = message => {
-        chrome.runtime.sendMessage(message, response => console.log(response));
-        return;
-    };
     const startCounter = () => {
         $commands.start.text('ラップ');
         if (!interval) {
@@ -82,7 +64,7 @@ $(() => {
                 data.running = true;
                 data.start = common.getTimestamp();
             }
-            updateData();
+            common.updateData(data);
             startCounter();
             return true;
         },
@@ -90,7 +72,7 @@ $(() => {
             if (data.running) {
                 data.running = false;
                 data.time += common.getTimestamp() - data.start;
-                updateData();
+                common.updateData(data);
             }
             stopCounter();
             return true;
@@ -99,7 +81,7 @@ $(() => {
             data.time = 0;
             data.start = common.getTimestamp();
             data.laps = [];
-            updateData();
+            common.updateData(data);
             updateTime(0);
             updateLaps(data.laps);
             return true;
@@ -125,18 +107,19 @@ $(() => {
         },
         show: () => {
             data.visible = true;
-            updateData();
+            common.updateData(data);
             return true;
         },
         hide: () => {
             data.visible = false;
-            updateData();
+            common.updateData(data);
             return true;
         },
     };
     const execute = command => {
         if ($.isFunction(commands[command]) && commands[command]()) {
-            sendMessage({data, command});
+            common.sendMessage({data, command})
+                .catch(error => console.log(error.toString()));
         }
         return;
     };
@@ -188,7 +171,8 @@ $(() => {
         return;
     });
 
-    loadData(item => {
+    common.loadData().then(item => {
+        data = item;
         $(`#${item.visible ? 'show' : 'hide'}`).prop('checked', true);
         updateTime(item.time);
         updateLaps(item.laps);
