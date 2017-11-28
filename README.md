@@ -23,6 +23,7 @@ The stop watch for chrome extension
 
 ショートカット
 * コピー: Command + Shift + C
+* リセット: Command + Shift + 0
 * 開始: 停止中にストップウォッチをダブルクリック
 * 停止: 計測中にストップウォッチをダブルクリック
 
