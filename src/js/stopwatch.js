@@ -22,6 +22,7 @@ $(() => {
 
     const CONTENT_MERGIN = 30;
     const COPY_KEY_CODE = 'C'.charCodeAt(0);
+    const RESET_KEY_CODE = '0'.charCodeAt(0);
     const $times = {
         hour: {
             left: $('#k-stopwatch-left-hour'),
@@ -150,9 +151,16 @@ $(() => {
         }
         return;
     }).on('keydown', event => {
-        if (isKeyDownCommand(event) && event.shiftKey && event.keyCode === COPY_KEY_CODE) {
-            copy();
-            event.preventDefault();
+        if (isKeyDownCommand(event) && event.shiftKey) {
+            if (event.keyCode === COPY_KEY_CODE) {
+                copy();
+                event.preventDefault();
+            } else if (event.keyCode === RESET_KEY_CODE) {
+                common.sendMessage({ command: 'reset' })
+                    .then(response => showToast(response.command))
+                    .catch(error => console.log(error.toString()));
+                event.preventDefault();
+            }
         }
         return;
     });

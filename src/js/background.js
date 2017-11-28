@@ -54,7 +54,14 @@
             return {result: true, message: 'success', command: 'stop'};
         },
         reset: newData => {
-            data = newData;
+            if (newData === void 0) {
+                data.time = 0;
+                data.start = common.getTimestamp();
+                data.laps = [];
+                common.updateData(data);
+            } else {
+                data = newData;
+            }
             sendTime(0);
             return {result: true, message: 'success', command: 'reset'};
         },
